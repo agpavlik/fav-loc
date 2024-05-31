@@ -1,11 +1,15 @@
-import { Alert, Button, View } from "react-native";
+import { Alert, Button, View, StyleSheet, Image, Text } from "react-native";
 import {
   launchCameraAsync, //launch the device camera and wait for take an image
   useCameraPermissions,
   PermissionStatus,
 } from "expo-image-picker";
+import { Colors } from "../../constants/colors";
+import { useState } from "react";
 
 function ImagePicker() {
+  const [pickedImage, setPickedImage] = useState();
+
   // ---- permission for iOS
   const [cameraPermissionInformation, requestPermission] =
     useCameraPermissions();
@@ -28,7 +32,9 @@ function ImagePicker() {
 
     return true;
   }
+  // ----
 
+  // Handle image
   async function takeImageHandler() {
     const hasPermission = await verifyPermissions();
 
@@ -37,22 +43,46 @@ function ImagePicker() {
       return;
     }
 
-    // ----
-
     const image = await launchCameraAsync({
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5,
     });
     console.log(image);
+    setPickedImage(image.assets[0].uri); // Store picked image
   }
+
+  // Show text if there is no image yet
+  let imagePreview = <Text>No image taken yet.</Text>;
+
+  if (pickedImage) {
+    imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
+  }
+
+  // ----
 
   return (
     <View>
-      <View></View>
+      <View style={styles.imageP}>{imagePreview}</View>
       <Button title="Take Image" onPress={takeImageHandler} />
     </View>
   );
 }
 
 export default ImagePicker;
+
+const styles = StyleSheet.create({
+  imageP: {
+    width: "100%",
+    height: 200,
+    marginVertical: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.primary100,
+    borderRadius: 4,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+});

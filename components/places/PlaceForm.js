@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderBottomColor: Colors.primary700,
     borderBottomWidth: 3,
-    backgroundColor: Colors.primary50,
+    backgroundColor: Colors.primary100,
   },
 });
