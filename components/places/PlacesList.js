@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import PlaceItem from "./PlaceItem";
 
 function PlacesList({ places }) {
+  // Check if places is null or undefined and return a fallback text.
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
@@ -17,7 +18,7 @@ function PlacesList({ places }) {
     <FlatList
       data={places}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <PlaceItem place={item} />}
+      renderItem={({ item }) => <PlaceItem place={item} />} // Function that controls which kind of component will be used for every item that's passed into FlatList.
     />
   );
 }
