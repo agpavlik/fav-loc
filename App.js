@@ -21,7 +21,7 @@ export default function App() {
               headerRight: ({ tintColor }) => (
                 <IconButton
                   icon="add-circle-outline"
-                  size={24}
+                  size={26}
                   color={tintColor}
                   onPress={() => navigation.navigate("AddPlace")}
                 />
