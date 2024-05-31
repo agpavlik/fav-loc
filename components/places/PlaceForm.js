@@ -20,7 +20,7 @@ function PlaceForm() {
           value={enteredTitle}
         />
       </View>
-      {/* <ImagePicker /> */}
+      <ImagePicker />
     </ScrollView>
   );
 }
