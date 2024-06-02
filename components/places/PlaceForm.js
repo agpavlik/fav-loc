@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderBottomColor: Colors.primary700,
     borderBottomWidth: 3,
+    borderRadius: 2,
     backgroundColor: Colors.primary100,
   },
 });
