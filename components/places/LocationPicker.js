@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 import { getMapPreview } from "../../util/location.js";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   getCurrentPositionAsync,
@@ -17,6 +18,8 @@ import { useState } from "react";
 
 function LocationPicker() {
   const [pickedLocation, setPickedLocation] = useState();
+
+  const navigation = useNavigation();
 
   // ---- Permission is required for both devices android and iOS
   const [locationPermissionInformation, requestPermission] =
@@ -60,7 +63,11 @@ function LocationPicker() {
   }
   // ----
 
-  function pickOnMapHandler() {}
+  // ---- Open the map screen
+  function pickOnMapHandler() {
+    navigation.navigate("Map");
+  }
+  // ----
 
   // ---- Check and store picked location image
   let locationPreview = <Text>No location picked yet.</Text>;
