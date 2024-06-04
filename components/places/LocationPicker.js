@@ -2,24 +2,57 @@ import { View, StyleSheet, Text, Image } from "react-native";
 
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
-import { getMapPreview } from "../../util/location.js";
-import { useNavigation } from "@react-navigation/native";
-
+import { getAddress, getMapPreview } from "../../util/location.js";
 import {
   getCurrentPositionAsync,
   useForegroundPermissions,
   PermissionStatus,
 } from "expo-location";
-import { useState } from "react";
+import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
+import { useEffect, useState } from "react";
 
 // Will offer user two ways of picking a location.
 // Either by locating the user through GPS, or
 // by allowing the user to pick a location on a map.
 
-function LocationPicker() {
+function LocationPicker({ onPickLocation }) {
   const [pickedLocation, setPickedLocation] = useState();
 
+  const isFocused = useIsFocused(); // will be true if the screen is currently focused and falls otherwise.
+
   const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    // Check if route.params is truthy
+    if (isFocused && route.params) {
+      const mapPickedLocation = {
+        lat: route.params.pickedLat,
+        lng: route.params.pickedLng,
+      };
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [route, isFocused]);
+
+  // ---- Call teh function whenever a location is picked
+  useEffect(() => {
+    async function handleLocation() {
+      if (pickedLocation) {
+        const address = await getAddress(
+          pickedLocation.lat,
+          pickedLocation.lng
+        );
+        onPickLocation({ ...pickedLocation, address: address });
+      }
+    }
+
+    handleLocation();
+  }, [pickedLocation, onPickLocation]);
+  // ----
 
   // ---- Permission is required for both devices android and iOS
   const [locationPermissionInformation, requestPermission] =
@@ -104,12 +137,12 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   mapPreview: {
     width: "100%",
-    height: 200,
+    height: 160,
     marginVertical: 8,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary100,
-    borderRadius: 4,
+    borderRadius: 2,
     overflow: "hidden",
   },
   actions: {

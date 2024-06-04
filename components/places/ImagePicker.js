@@ -1,4 +1,4 @@
-import { Alert, Button, View, StyleSheet, Image, Text } from "react-native";
+import { Alert, View, StyleSheet, Image, Text } from "react-native";
 import {
   launchCameraAsync, //launch the device camera and wait for take an image
   useCameraPermissions,
@@ -8,7 +8,7 @@ import { Colors } from "../../constants/colors";
 import { useState } from "react";
 import OutlinedButton from "../UI/OutlinedButton";
 
-function ImagePicker() {
+function ImagePicker({ onTakeImage }) {
   const [pickedImage, setPickedImage] = useState();
 
   // ---- permission for iOS
@@ -50,7 +50,9 @@ function ImagePicker() {
       quality: 0.5,
     });
     console.log(image);
+    console.log(image.assets[0].uri);
     setPickedImage(image.assets[0].uri); // Store picked image
+    onTakeImage(image.assets[0].uri);
   }
 
   // Show text if there is no image yet
@@ -77,12 +79,13 @@ export default ImagePicker;
 const styles = StyleSheet.create({
   imagePreview: {
     width: "100%",
-    height: 200,
+    height: 160,
     marginVertical: 8,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary100,
     borderRadius: 2,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
