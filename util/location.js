@@ -6,10 +6,12 @@ export function getMapPreview(lat, lng) {
   return imagePreviewUrl;
 }
 
+// Translate coordinates to human readable address
 export async function getAddress(lat, lng) {
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAP_BOX_TOKEN}`;
   const response = await fetch(url);
 
+  // Check if response is ok
   if (!response.ok) {
     throw new Error("Failed to fetch address!");
   }
