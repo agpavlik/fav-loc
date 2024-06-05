@@ -1,7 +1,24 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
+import {
+  GestureHandlerRootView,
+  Swipeable,
+} from "react-native-gesture-handler";
 
-function PlaceItem({ place, onSelect }) {
+function PlaceItem({ place, onSelect, onDelete }) {
+  function renderLeftActions(placeId) {
+    return (
+      <View style={styles.deleteAction}>
+        <IconButton
+          icon="trash"
+          color={Colors.gray700}
+          size={24}
+          onPress={onDelete.bind(this, placeId)}
+        />
+      </View>
+    );
+  }
+
   return (
     <Pressable
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
