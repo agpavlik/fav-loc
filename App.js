@@ -9,26 +9,36 @@ import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
 
 import { init } from "./util/database";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
+
+// keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   // ---- Initialize database
   const [dbInitialized, setDbInitialized] = useState(false);
 
+  // SQLite initialization whenever the app is launched.
   useEffect(() => {
-    init()
-      .then(() => {
-        setDbInitialized(true);
-      })
-      .catch((err) => {
+    async function initDB() {
+      try {
+        await init();
+        setDbInitialized(true); // Database initialized successfully.
+      } catch (err) {
         console.log(err);
-      });
+      }
+    }
+    initDB();
   }, []);
 
   if (!dbInitialized) {
-    return <AppLoading />;
+    return null; // return null to display the splash screen.
+  } else {
+    // hide the splash screen.
+    SplashScreen.hideAsync();
   }
   // ----
 

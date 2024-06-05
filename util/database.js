@@ -1,30 +1,50 @@
+// helper functions to work with SQLite.
+
 import * as SQLite from "expo-sqlite";
 
-const database = SQLite.openDatabase("places.db"); //create database
+//create a database
+const database = SQLite.openDatabaseSync("places.db");
 
-export function init() {
-  const promise = new Promise((resolve, reject) => {
-    // Transaction method will execute a query against the database.
-    database.transaction((tx) => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS places (
+// initialize the database
+export async function init() {
+  return await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS places (
           id INTEGER PRIMARY KEY NOT NULL,
           title TEXT NOT NULL,
           imageUri TEXT NOT NULL,
           address TEXT NOT NULL,
           lat REAL NOT NULL,
           lng REAL NOT NULL
-        )`,
-        [],
-        () => {
-          resolve();
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  });
-
-  return promise;
+        )`
+  );
 }
+
+// insert a place into the database.
+export async function insertPlace(place) {
+  const result = await database.runAsync(
+    `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
+    [
+      place.title,
+      place.imageUri,
+      place.address,
+      place.location.lat,
+      place.location.lng,
+    ]
+  );
+  return result.lastInsertRowId; // return the id of the inserted place.
+}
+
+// // fetch all places from the database.
+// export async function fetchPlaces() {
+//   return await database.getAllAsync(`SELECT * FROM places`);
+// }
+
+// // fetch a single place from the database.
+// export async function fetchPlace(id) {
+//   return await database.getFirstAsync(`SELECT * FROM places WHERE id = ?`, [id]);
+// }
+
+// // delete a place from the database.
+// export async function deletePlace(id) {
+//   return await database.runAsync(`DELETE FROM places WHERE id = ?`, [id]);
+// }
