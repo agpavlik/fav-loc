@@ -6,13 +6,24 @@ import MapView, { Marker } from "react-native-maps";
 
 import IconButton from "../components/UI/IconButton";
 
-function Map({ navigation }) {
-  const [selectedLocation, setSelectedLocation] = useState();
+function Map({ navigation, route }) {
+  const [selectedLocation, setSelectedLocation] = useState(initialLocation);
+
+  // route params hold the initial location coordinates.
+  const initialLocation = route.params && {
+    lat: route.params.initialLat,
+    lng: route.params.initialLng,
+  };
+
+  // get the previous route name.
+  const routes = navigation.getState()?.routes;
+  const previousRoute = routes[routes.length - 2];
+  const previousRouteName = previousRoute.name;
 
   const region = {
     // define the center of the map.
-    latitude: 37.78,
-    longitude: -122.43,
+    latitude: initialLocation ? initialLocation.lat : 37.78,
+    longitude: initialLocation ? initialLocation.lng : -122.43,
     // Delta = size of the map - how much content beside the center will be visible (i.e. zoom level)
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -20,6 +31,10 @@ function Map({ navigation }) {
 
   // event handler that is called when the user clicks on the map.
   function selectLocationHandler(event) {
+    // if the previous route is PlaceDetails, then we want to disable the click option.
+    if (previousRouteName === "PlaceDetails") {
+      return null;
+    }
     // coordinates of the selected location.
     const lat = event.nativeEvent.coordinate.latitude;
     const lng = event.nativeEvent.coordinate.longitude;
@@ -45,12 +60,17 @@ function Map({ navigation }) {
       pickedLat: selectedLocation.lat,
       pickedLng: selectedLocation.lng,
     });
-  }, [navigation, selectedLocation]);
+  }, [navigation, selectedLocation, initialLocation]);
 
   //---- For executed just once use useLayoutEffect
   // the code inside useLayoutEffect is processed before the component is displayed;
   // fires before the browser repaints the screen.
   useLayoutEffect(() => {
+    // if the previous route is PlaceDetails, then we do not need to display the 'save' button.
+    if (previousRouteName === "PlaceDetails") {
+      return;
+    }
+    // set the headerRight button to the 'save' icon.
     navigation.setOptions({
       headerRight: ({ tintColor }) => (
         <IconButton
