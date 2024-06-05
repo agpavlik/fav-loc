@@ -3,8 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import PlaceItem from "./PlaceItem";
 import { Colors } from "../../constants/colors";
+import { deletePlace } from "../../util/database"; // helper functions to work with SQLite.
 
-function PlacesList({ places }) {
+function PlacesList({ places, onPlaceUpdate }) {
   const navigation = useNavigation(); // Hook adds access to the navigation object
 
   // Use navigation object to navigate away whenever a place is selected.
@@ -25,13 +26,24 @@ function PlacesList({ places }) {
     );
   }
 
+  // Handle delete place
+  async function deletePlaceHandler(id) {
+    onPlaceUpdate(false);
+    await deletePlace(id);
+    onPlaceUpdate(true);
+  }
+
   return (
     <FlatList
       style={styles.list}
       data={places}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <PlaceItem place={item} onSelect={selectPlaceHandler} />
+        <PlaceItem
+          place={item}
+          onSelect={selectPlaceHandler}
+          onDelete={deletePlaceHandler}
+        />
       )} // Function that controls which kind of component will be used for every item that's passed into FlatList.
     />
   );
