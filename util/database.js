@@ -1,9 +1,10 @@
 import * as SQLite from "expo-sqlite";
 
-const database = SQLite.openDatabase("places.db");
+const database = SQLite.openDatabase("places.db"); //create database
 
 export function init() {
   const promise = new Promise((resolve, reject) => {
+    // Transaction method will execute a query against the database.
     database.transaction((tx) => {
       tx.executeSql(
         `CREATE TABLE IF NOT EXISTS places (

@@ -8,9 +8,30 @@ import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
 
+import { init } from "./util/database";
+import { useState } from "react";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  // ---- Initialize database
+  const [dbInitialized, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => {
+        setDbInitialized(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  if (!dbInitialized) {
+    return <AppLoading />;
+  }
+  // ----
+
   return (
     <>
       <StatusBar style="auto" />
