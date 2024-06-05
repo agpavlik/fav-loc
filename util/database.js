@@ -40,7 +40,7 @@ export async function fetchPlaces() {
 }
 
 // fetch a single place from the database.
-export async function fetchPlace(id) {
+export async function fetchPlaceDetails(id) {
   return await database.getFirstAsync(`SELECT * FROM places WHERE id = ?`, [
     id,
   ]);

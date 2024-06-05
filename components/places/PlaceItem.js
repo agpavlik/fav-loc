@@ -5,7 +5,7 @@ function PlaceItem({ place, onSelect }) {
   return (
     <Pressable
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
-      onPress={onSelect}
+      onPress={onSelect.bind(this, place.id)} // with bind we ensure that place.id reaches to selectPlaceHandler in PlacesList.
     >
       <Image style={styles.image} source={{ uri: place.imageUri }} />
 
