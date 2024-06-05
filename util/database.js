@@ -34,17 +34,19 @@ export async function insertPlace(place) {
   return result.lastInsertRowId; // return the id of the inserted place.
 }
 
-// // fetch all places from the database.
-// export async function fetchPlaces() {
-//   return await database.getAllAsync(`SELECT * FROM places`);
-// }
+// fetch all places from the database.
+export async function fetchPlaces() {
+  return await database.getAllAsync(`SELECT * FROM places`);
+}
 
-// // fetch a single place from the database.
-// export async function fetchPlace(id) {
-//   return await database.getFirstAsync(`SELECT * FROM places WHERE id = ?`, [id]);
-// }
+// fetch a single place from the database.
+export async function fetchPlace(id) {
+  return await database.getFirstAsync(`SELECT * FROM places WHERE id = ?`, [
+    id,
+  ]);
+}
 
-// // delete a place from the database.
-// export async function deletePlace(id) {
-//   return await database.runAsync(`DELETE FROM places WHERE id = ?`, [id]);
-// }
+// delete a place from the database.
+export async function deletePlace(id) {
+  return await database.runAsync(`DELETE FROM places WHERE id = ?`, [id]);
+}

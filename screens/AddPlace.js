@@ -8,9 +8,7 @@ function AddPlace({ navigation }) {
     // insert the place into the database.
     await insertPlace(place);
     // navigate to 'AllPlaces' screen.
-    navigation.navigate("AllPlaces", {
-      place: place,
-    });
+    navigation.navigate("AllPlaces");
   }
   return <PlaceForm onCreatePlace={createPlaceHandler} />;
 }
