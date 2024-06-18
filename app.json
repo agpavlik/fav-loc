@@ -20,7 +20,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.olekpavlyk.favloc"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,6 +36,11 @@
           "cameraPermission": "The app needs access to your camera in order to take photos of your favorite places."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ab535fd6-7c37-41f1-8e60-6d131b53d12c"
+      }
+    }
   }
 }

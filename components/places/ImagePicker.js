@@ -27,13 +27,18 @@ function ImagePicker({ onTakeImage }) {
     }
 
     if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
-      Alert.alert(
-        "Insufficient Permissions!",
-        "You need to grant camera permissions to use this app."
-      );
-      return false;
+      const canAsk = cameraPermissionInformation.canAskAgain;
+      if (canAsk) {
+        const permissionResponse = await requestPermission();
+        return permissionResponse.granted;
+      } else {
+        Alert.alert(
+          "Insufficient Permissions!",
+          "You need to grant camera permissions to use this app."
+        );
+        return false;
+      }
     }
-
     return true;
   }
   // ----
